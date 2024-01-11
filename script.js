@@ -85,7 +85,7 @@ setInterval(function () {
 }, 200);
 
 addEventListener("keydown", function (event) {
-	if ((event.key = " ") && pauseVariable === 0) {
+	if ((event.key === " ") && pauseVariable === 0) {
 		pauseVariable = 1;
 	} else {
 		pauseVariable = 0;
