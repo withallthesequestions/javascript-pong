@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    body {
+      background-color: black;
+      min-height: 98vh;
+      max-width: 100vh;
+      outline: 1px white solid;
+      position: relative;
+      color: white;
+    }
+
+    #ball {
+      height: 3%;
+      width: 3%;
+      background-color: white;
+      position: absolute;
+      transform: translate(-50%, -50%);
+    }
+
+    .paddle {
+      height: 10%;
+      width: 1%;
+      background-color: white;
+      position: absolute;
+      transform: translate(-50%, -50%);
+    }
+
+    p {
+      position: absolute;
+      margin: 10px 0px 0px 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <p>Press SPACE to pause; user 1 movement: Q, A; user 2 movement: O, L</p>
+  <div id="ball" style="top:30%; left: 30%;"></div>
+  <div id="1UserPaddle" class="paddle" style="top: 90%; left: 10%"></div>
+  <div id="2UserPaddle" class="paddle" style="top: 90%; left: 90%"></div>
+
+  </div>
+
+</body>
+<script src="./script.js"></script>
+
+</html>
