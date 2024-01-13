@@ -1,36 +1,42 @@
 let ball = document.getElementById("ball");
 let onePaddle = document.getElementById("1UserPaddle");
 let twoPaddle = document.getElementById("2UserPaddle");
-let pauseVariable = 0;
+let pauseSetting = 0;
+let playerOneScore = document.getElementById("playerOneScore");
+let playerTwoScore = document.getElementById("playerTwoScore");
 
-let velocityX = 1;
-let velocityY = 1.25;
+let horizontalBallSpeed = 1;
+let verticalBallSpeed = 1.33;
 
 addEventListener("click", function (event) {
-	velocityX = velocityX * -1;
-	velocityY = velocityY * -1;
+	horizontalBallSpeed = horizontalBallSpeed * -1;
+	verticalBallSpeed = verticalBallSpeed * -1;
 });
 
-function moveBall(velocityX, velocityY) {
+function moveBall(horizontalBallSpeed, verticalBallSpeed) {
 	ball.style.left =
-		String(Number(ball.style.left.replace("%", "")) + velocityX) + "%";
+		String(Number(ball.style.left.replace("%", "")) + horizontalBallSpeed) +
+		"%";
 	ball.style.top =
-		String(Number(ball.style.top.replace("%", "")) + velocityY) + "%";
-	// }
+		String(Number(ball.style.top.replace("%", "")) + verticalBallSpeed) + "%";
 }
 
-function checkEdgeCollision() {
+function checkEdgeTouch() {
 	if (
-		Number(ball.style.left.replace("%", "")) >= 98.5 ||
-		Number(ball.style.left.replace("%", "")) <= 1.5
+		Number(ball.style.top.replace("%", "")) >= 97.5 ||
+		Number(ball.style.top.replace("%", "")) <= 2.5
 	) {
-		velocityX = velocityX * -1;
+		verticalBallSpeed = verticalBallSpeed * -1;
 	}
 	if (
-		Number(ball.style.top.replace("%", "")) >= 98.5 ||
-		Number(ball.style.top.replace("%", "")) <= 1.5
+		Number(ball.style.left.replace("%", "")) >= 97.5 ||
+		Number(ball.style.left.replace("%", "")) <= 2.5
 	) {
-		velocityY = velocityY * -1;
+		horizontalBallSpeed = 0;
+		verticalBallSpeed = 0;
+		playerOneScore.innerText = Number(playerOneScore.innerText) + 1;
+		/* reposition the ball here, so it doesn't keep triggering the score. Then restart game. */
+		ball.style.left = "40%";
 	}
 }
 
@@ -55,7 +61,7 @@ addEventListener("keydown", function (event) {
 	}
 });
 
-function checkPaddleCollision() {
+function checkPaddleTouch() {
 	if (
 		ball.style.left === "10%" &&
 		Number(onePaddle.style.top.replace("%", "")) + 5 >=
@@ -63,7 +69,7 @@ function checkPaddleCollision() {
 		Number(ball.style.top.replace("%", "")) >=
 			Number(onePaddle.style.top.replace("%", "")) - 5
 	) {
-		velocityX = velocityX * -1;
+		horizontalBallSpeed = horizontalBallSpeed * -1;
 	}
 	if (
 		ball.style.left === "90%" &&
@@ -72,22 +78,23 @@ function checkPaddleCollision() {
 		Number(ball.style.top.replace("%", "")) >=
 			Number(twoPaddle.style.top.replace("%", "")) - 5
 	) {
-		velocityX = velocityX * -1;
+		horizontalBallSpeed = horizontalBallSpeed * -1;
 	}
 }
 
 setInterval(function () {
-	if (pauseVariable === 0) {
-		moveBall(velocityX, velocityY);
-		checkEdgeCollision();
-		checkPaddleCollision();
+	if (pauseSetting === 0) {
+		moveBall(horizontalBallSpeed, verticalBallSpeed);
+		checkEdgeTouch();
+		checkPaddleTouch();
 	}
 }, 200);
 
+/* Pause Functionality */
 addEventListener("keydown", function (event) {
-	if ((event.key === " ") && pauseVariable === 0) {
-		pauseVariable = 1;
+	if (event.key === " " && pauseSetting === 0) {
+		pauseSetting = 1;
 	} else {
-		pauseVariable = 0;
+		pauseSetting = 0;
 	}
 });
