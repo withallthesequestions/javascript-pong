@@ -28,10 +28,14 @@ function checkEdgeTouch() {
 	) {
 		verticalBallSpeed = verticalBallSpeed * -1;
 	}
-	if (
-		Number(ball.style.left.replace("%", "")) >= 97.5 ||
-		Number(ball.style.left.replace("%", "")) <= 2.5
-	) {
+	if (Number(ball.style.left.replace("%", "")) <= 2.5) {
+		horizontalBallSpeed = 0;
+		verticalBallSpeed = 0;
+		playerTwoScore.innerText = Number(playerTwoScore.innerText) + 1;
+		/* reposition the ball here, so it doesn't keep triggering the score. Then restart game. */
+		ball.style.left = "40%";
+	}
+	if (Number(ball.style.left.replace("%", "")) >= 97.5) {
 		horizontalBallSpeed = 0;
 		verticalBallSpeed = 0;
 		playerOneScore.innerText = Number(playerOneScore.innerText) + 1;
