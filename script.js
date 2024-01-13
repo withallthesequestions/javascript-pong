@@ -1,24 +1,43 @@
 let ball = document.getElementById("ball");
 let onePaddle = document.getElementById("1UserPaddle");
 let twoPaddle = document.getElementById("2UserPaddle");
-let pauseSetting = 0;
 let playerOneScore = document.getElementById("playerOneScore");
 let playerTwoScore = document.getElementById("playerTwoScore");
 
-let horizontalBallSpeed = 1;
-let verticalBallSpeed = 1.33;
+let HORIZONTALBALLSPEED = 1;
+let VERTICALBALLSPEED = 1.33;
+let resetBallSignal = 0;
+let pauseGameSignal = 0;
 
-addEventListener("click", function (event) {
-	horizontalBallSpeed = horizontalBallSpeed * -1;
-	verticalBallSpeed = verticalBallSpeed * -1;
+setInterval(function () {
+	if (pauseGameSignal === 0 && resetBallSignal === 0) {
+		moveBall(HORIZONTALBALLSPEED, VERTICALBALLSPEED);
+		checkEdgeTouch();
+		checkPaddleTouch();
+	} else if (pauseGameSignal === 0 && resetBallSignal === 1) {
+		ball.style.left = "50%";
+		ball.style.top = "50%";
+		resetBallSignal = 0;
+		moveBall(HORIZONTALBALLSPEED, VERTICALBALLSPEED);
+		checkEdgeTouch();
+		checkPaddleTouch();
+	}
+}, 200);
+
+addEventListener("keydown", function (event) {
+	if (event.key === " " && pauseGameSignal === 0) {
+		pauseGameSignal = 1;
+	} else {
+		pauseGameSignal = 0;
+	}
 });
 
-function moveBall(horizontalBallSpeed, verticalBallSpeed) {
+function moveBall(HORIZONTALBALLSPEED, VERTICALBALLSPEED) {
 	ball.style.left =
-		String(Number(ball.style.left.replace("%", "")) + horizontalBallSpeed) +
+		String(Number(ball.style.left.replace("%", "")) + HORIZONTALBALLSPEED) +
 		"%";
 	ball.style.top =
-		String(Number(ball.style.top.replace("%", "")) + verticalBallSpeed) + "%";
+		String(Number(ball.style.top.replace("%", "")) + VERTICALBALLSPEED) + "%";
 }
 
 function checkEdgeTouch() {
@@ -26,21 +45,36 @@ function checkEdgeTouch() {
 		Number(ball.style.top.replace("%", "")) >= 97.5 ||
 		Number(ball.style.top.replace("%", "")) <= 2.5
 	) {
-		verticalBallSpeed = verticalBallSpeed * -1;
+		VERTICALBALLSPEED = VERTICALBALLSPEED * -1;
 	}
 	if (Number(ball.style.left.replace("%", "")) <= 2.5) {
-		horizontalBallSpeed = 0;
-		verticalBallSpeed = 0;
 		playerTwoScore.innerText = Number(playerTwoScore.innerText) + 1;
-		/* reposition the ball here, so it doesn't keep triggering the score. Then restart game. */
-		ball.style.left = "40%";
+		resetBallSignal = 1;
 	}
 	if (Number(ball.style.left.replace("%", "")) >= 97.5) {
-		horizontalBallSpeed = 0;
-		verticalBallSpeed = 0;
 		playerOneScore.innerText = Number(playerOneScore.innerText) + 1;
-		/* reposition the ball here, so it doesn't keep triggering the score. Then restart game. */
-		ball.style.left = "40%";
+		resetBallSignal = 1;
+	}
+}
+
+function checkPaddleTouch() {
+	if (
+		ball.style.left === "10%" &&
+		Number(onePaddle.style.top.replace("%", "")) + 5 >=
+			Number(ball.style.top.replace("%", "")) &&
+		Number(ball.style.top.replace("%", "")) >=
+			Number(onePaddle.style.top.replace("%", "")) - 5
+	) {
+		HORIZONTALBALLSPEED = HORIZONTALBALLSPEED * -1;
+	}
+	if (
+		ball.style.left === "90%" &&
+		Number(twoPaddle.style.top.replace("%", "")) + 5 >=
+			Number(ball.style.top.replace("%", "")) &&
+		Number(ball.style.top.replace("%", "")) >=
+			Number(twoPaddle.style.top.replace("%", "")) - 5
+	) {
+		HORIZONTALBALLSPEED = HORIZONTALBALLSPEED * -1;
 	}
 }
 
@@ -65,40 +99,7 @@ addEventListener("keydown", function (event) {
 	}
 });
 
-function checkPaddleTouch() {
-	if (
-		ball.style.left === "10%" &&
-		Number(onePaddle.style.top.replace("%", "")) + 5 >=
-			Number(ball.style.top.replace("%", "")) &&
-		Number(ball.style.top.replace("%", "")) >=
-			Number(onePaddle.style.top.replace("%", "")) - 5
-	) {
-		horizontalBallSpeed = horizontalBallSpeed * -1;
-	}
-	if (
-		ball.style.left === "90%" &&
-		Number(twoPaddle.style.top.replace("%", "")) + 5 >=
-			Number(ball.style.top.replace("%", "")) &&
-		Number(ball.style.top.replace("%", "")) >=
-			Number(twoPaddle.style.top.replace("%", "")) - 5
-	) {
-		horizontalBallSpeed = horizontalBallSpeed * -1;
-	}
-}
-
-setInterval(function () {
-	if (pauseSetting === 0) {
-		moveBall(horizontalBallSpeed, verticalBallSpeed);
-		checkEdgeTouch();
-		checkPaddleTouch();
-	}
-}, 200);
-
-/* Pause Functionality */
-addEventListener("keydown", function (event) {
-	if (event.key === " " && pauseSetting === 0) {
-		pauseSetting = 1;
-	} else {
-		pauseSetting = 0;
-	}
+addEventListener("click", function () {
+	HORIZONTALBALLSPEED = HORIZONTALBALLSPEED * -1;
+	VERTICALBALLSPEED = VERTICALBALLSPEED * -1;
 });
